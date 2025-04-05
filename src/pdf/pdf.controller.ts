@@ -1,3 +1,4 @@
+import { QdrantService } from './../embedding/qdrant.service';
 import { EmbeddingService } from './../embedding/embedding.service';
 import {
   Controller,
@@ -11,7 +12,10 @@ import { Express } from 'express';
 
 @Controller('pdf/parse')
 export class PdfParseController {
-  constructor(private readonly embeddingService: EmbeddingService) {}
+  constructor(
+    private readonly embeddingService: EmbeddingService,
+    private readonly qdrantService: QdrantService,
+  ) {}
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file')) // 'file' 필드에 PDF 파일 업로드
@@ -21,16 +25,21 @@ export class PdfParseController {
     // PDF에서 텍스트 추출
     const data = await pdf(pdfBuffer);
     const extractedText = data.text;
-    console.log(extractedText, 'test');
+
     // 텍스트 임베딩 생성
     const embedding =
       await this.embeddingService.generateEmbedding(extractedText);
 
-    // // Qdrant에 벡터 저장
-    // const qdrantResponse = await this.qdrantService.upsertVector('pdf_collection', embedding, Date.now(), {
-    //     text: extractedText,
-    // });
+    // Qdrant에 벡터 저장
+    const qdrantResponse = await this.qdrantService.upsertVector(
+      Date.now().toString(),
+      embedding,
+      Date.now(),
+      {
+        text: extractedText,
+      },
+    );
 
-    return { success: true };
+    return { success: true, qdrantResponse };
   }
 }

@@ -9,9 +9,8 @@ export class EmbeddingService {
         model: 'mxbai-embed-large',
         input: text,
       });
-      console.log(response, 'responst');
-      // return response;
-      // return response.data.embedding;
+
+      return response.embeddings[0];
     } catch (error) {
       console.error('Error while generating embedding:', error);
       throw new Error('Failed to generate embedding');
