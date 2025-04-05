@@ -1,5 +1,3 @@
-import { QdrantService } from './../embedding/qdrant.service';
-import { EmbeddingService } from './../embedding/embedding.service';
 import {
   Controller,
   Post,
@@ -9,6 +7,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as pdf from 'pdf-parse';
 import { Express } from 'express';
+import { QdrantService } from 'src/qdrant/qdrant.service';
+import { EmbeddingService } from 'src/ollama/embedding.service';
 
 @Controller('pdf/parse')
 export class PdfParseController {
@@ -30,9 +30,9 @@ export class PdfParseController {
     const embedding =
       await this.embeddingService.generateEmbedding(extractedText);
 
-    // Qdrant에 벡터 저장
+    // Qdrant에 test라는 컬렉션으로 데이터 저장
     const qdrantResponse = await this.qdrantService.upsertVector(
-      Date.now().toString(),
+      'test',
       embedding,
       Date.now(),
       {

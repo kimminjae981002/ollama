@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PdfParseController } from './pdf.controller';
-import { EmbeddingModule } from 'src/embedding/embedding.module';
-import { EmbeddingService } from 'src/embedding/embedding.service';
-import { QdrantService } from 'src/embedding/qdrant.service';
+import { QdrantModule } from 'src/qdrant/qdrant.module';
+import { OllamaModule } from 'src/ollama/ollama.module';
 
 @Module({
-  imports: [EmbeddingModule],
-  providers: [EmbeddingService, QdrantService],
+  imports: [QdrantModule, OllamaModule],
   controllers: [PdfParseController],
 })
 export class PdfModule {}

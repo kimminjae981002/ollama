@@ -3,10 +3,11 @@ import ollama from 'ollama';
 
 @Injectable()
 export class EmbeddingService {
+  // text를 embed 해 주는 함수
   async generateEmbedding(text: string) {
     try {
       const response = await ollama.embed({
-        model: 'mxbai-embed-large', // 임베딩 모델 다운로드 필요
+        model: 'nomic-embed-text', // 임베딩 모델 다운로드 필요
         input: text,
       });
 

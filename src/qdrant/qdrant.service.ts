@@ -39,4 +39,17 @@ export class QdrantService {
       throw new Error('Qdrant 데이터 저장 실패');
     }
   }
+
+  // Qdrant에서 데이터를 찾아오는 함수
+  async searchVector(collectionName: string, vector: number[]) {
+    const client = new QdrantClient({ url: 'http://127.0.0.1:6333' });
+
+    const response = await client.search(collectionName, {
+      vector,
+      with_payload: true,
+      limit: 3,
+    });
+
+    return response;
+  }
 }
