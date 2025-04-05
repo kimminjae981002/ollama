@@ -11,6 +11,7 @@ export class QdrantService {
     payload: Record<string, unknown>,
   ) {
     try {
+      // Qdrant URL 사용
       const client = new QdrantClient({ url: 'http://127.0.0.1:6333' });
 
       // 컬렉션 만들기
@@ -21,20 +22,21 @@ export class QdrantService {
         },
       });
 
-      // Qdrant 컬렉션에 벡터 업서트
+      // Qdrant 컬렉션에 데이터 저장
       const response = await client.upsert(collectionName, {
         points: [
           {
             id, // 고유 ID
             vector, // 벡터 데이터
-            payload, // 추가 데이터 (예: 텍스트)
+            payload, // 텍스트 데이터
           },
         ],
       });
+
       return response;
     } catch (error) {
-      console.error('Error while inserting vector into Qdrant:', error);
-      throw new Error('Failed to insert vector into Qdrant');
+      console.error('Qdrant 데이터 저장 에러:', error);
+      throw new Error('Qdrant 데이터 저장 실패');
     }
   }
 }
