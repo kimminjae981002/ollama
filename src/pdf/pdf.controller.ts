@@ -20,7 +20,7 @@ export class PdfParseController {
     // PDF에서 텍스트 추출
     const data = await pdf(pdfBuffer);
     const extractedText = data.text;
-
+    console.log(extractedText, 'test');
     // // 텍스트 임베딩 생성
     // const embedding = await this.embeddingService.generateEmbedding(extractedText);
 
