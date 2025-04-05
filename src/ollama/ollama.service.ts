@@ -46,16 +46,28 @@ export class OllamaService {
   }
 
   // 응답을 생성하는 함수
-  async ask(prompt: string): Promise<string> {
+  async ask(prompt: string) {
     try {
-      // model mistral 한국어 답변 llama3 영어답변
-      const response = await ollama.generate({
-        model: 'tinyllama', // 설치된 모델 이름
-        prompt,
+      const response = await ollama.chat({
+        model: 'tinyllama',
+        messages: [
+          {
+            role: 'system',
+            content:
+              '넌 친절한 한국어 비서야. 간결하고 정확하게 한국어로 답해.',
+          },
+          { role: 'user', content: prompt },
+        ],
         stream: false,
       });
-
-      return response.response;
+      // // model mistral 한국어 답변 llama3 영어답변
+      // const response = await ollama.generate({
+      //   model: 'tinyllama', // 설치된 모델 이름
+      //   prompt,
+      //   stream: false,
+      // });
+      console.log(response, 'test');
+      // return response;
     } catch (error) {
       console.error('Ollama 응답 에러:', error);
       throw new Error('Ollama 요청 실패');
