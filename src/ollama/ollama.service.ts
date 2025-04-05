@@ -30,9 +30,16 @@ export class OllamaService {
       .filter((t): t is string => typeof t === 'string');
 
     // 프롬프트 구성
-    const prompt = `다음 내용을 기반으로 질문에 답해줘.\n\n내용:\n${matchedTexts.join(
-      '\n\n',
-    )}\n\n질문: ${question}`;
+    const prompt = `
+    [지문]
+    ${matchedTexts.join('\n\n')}
+    
+    [질문]
+    ${question}
+    
+    [지시사항]
+    위 질문을 영어로 이해한 뒤, 한국어로 자연스럽게 답변해줘. 답변은 반드시 한국어로만 해줘.
+    `;
 
     // mistral을 이용하여 답변 생성
     console.time('⏱️ LLM 답변 생성');
@@ -48,9 +55,9 @@ export class OllamaService {
   // 응답을 생성하는 함수
   async ask(prompt: string): Promise<string> {
     try {
-      // model mistral 한국어 답변 llama3 영ㅇ ㅓ답변
+      // model mistral 한국어 답변 llama3 영어답변
       const response = await ollama.generate({
-        model: 'mistral', // 설치된 모델 이름
+        model: 'tinyllama', // 설치된 모델 이름
         prompt,
         stream: false,
       });
